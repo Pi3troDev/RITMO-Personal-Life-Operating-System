@@ -1,0 +1,531 @@
+/*
+ * Camada "liquid glass" do RITMO (versão web).
+ * `expo-glass-effect` é uma biblioteca nativa (iOS/React Native); aqui o mesmo visual é feito com
+ * backdrop-filter, borda com brilho especular e um fundo "aurora" colorido para o vidro refratar.
+ * Tudo usa os tokens de tokens.css, então funciona nos temas claro e escuro.
+ */
+
+/* ---------- Fundo (neutro: só profundidade, sem cor)  ---------------------------------------------------------------- */
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--canvas);
+  pointer-events: none;
+}
+
+.aurora > i {
+  position: absolute;
+  width: 52vmax;
+  height: 52vmax;
+  border-radius: 50%;
+  opacity: var(--aurora-opacity);
+  filter: blur(90px);
+  will-change: transform;
+  animation: aurora-drift 32s ease-in-out infinite alternate;
+}
+
+.aurora > i:nth-child(1) {
+  background: var(--aurora-1);
+  left: -14vmax;
+  top: -18vmax;
+}
+.aurora > i:nth-child(2) {
+  background: var(--aurora-2);
+  right: -16vmax;
+  top: -10vmax;
+  animation-duration: 38s;
+  animation-delay: -9s;
+}
+.aurora > i:nth-child(3) {
+  background: var(--aurora-3);
+  left: 18vmax;
+  bottom: -26vmax;
+  width: 44vmax;
+  height: 44vmax;
+  animation-duration: 44s;
+  animation-delay: -18s;
+}
+.aurora > i:nth-child(4) {
+  background: var(--aurora-4);
+  right: -12vmax;
+  bottom: -16vmax;
+  width: 40vmax;
+  height: 40vmax;
+  animation-duration: 36s;
+  animation-delay: -4s;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(7vmax, 5vmax, 0) scale(1.12);
+  }
+  100% {
+    transform: translate3d(-5vmax, 9vmax, 0) scale(0.94);
+  }
+}
+
+/* ---------- Utilitários de vidro --------------------------------------------------------- */
+
+/* Borda de vidro: gradiente fino que imita a luz batendo na quina. */
+@utility glass-edge {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      150deg,
+      var(--glass-edge-a),
+      transparent 32%,
+      transparent 68%,
+      var(--glass-edge-b)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* Vidro padrão (barras, botões, chips). Precisa de position: relative/sticky/fixed. */
+@utility glass {
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.1), transparent 55%),
+    var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgb(0 0 0 / 0.08),
+    0 10px 30px -10px var(--glass-shadow);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      150deg,
+      var(--glass-edge-a),
+      transparent 32%,
+      transparent 68%,
+      var(--glass-edge-b)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* Vidro mais opaco para o que precisa de leitura (menus, diálogos, navegação móvel). */
+@utility glass-strong {
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.08), transparent 55%),
+    var(--glass-bg-strong);
+  backdrop-filter: blur(34px) saturate(190%);
+  -webkit-backdrop-filter: blur(34px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 24px 60px -16px var(--glass-shadow);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      150deg,
+      var(--glass-edge-a),
+      transparent 32%,
+      transparent 68%,
+      var(--glass-edge-b)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/* Painel principal: vidro bem leve, a aurora aparece através dele. */
+@utility glass-panel {
+  background: color-mix(in oklab, var(--background) 58%, transparent);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+}
+
+/* Cartões de conteúdo: vidro fosco com borda de luz. */
+@utility surface {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 0.07), transparent 50%),
+    color-mix(in oklab, var(--card) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+  border: 1px solid color-mix(in oklab, var(--glass-border) 70%, transparent);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 12px 32px -14px var(--glass-shadow);
+}
+
+/* Destaque (hero): vidro com um único brilho discreto do acento. */
+@utility surface-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(36rem 14rem at 100% 0%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 65%),
+    color-mix(in oklab, var(--card) 60%, transparent);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid color-mix(in oklab, var(--glass-border) 80%, transparent);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 24px 60px -24px var(--glass-shadow);
+}
+
+@utility eyebrow {
+  font-size: var(--text-2xs);
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--subtle-foreground);
+}
+
+/* Entrada suave dos blocos da página; `--i` escalona o atraso. */
+@utility rise {
+  animation: rise 0.65s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+}
+
+/* Brilho colorido atrás de um elemento (use com style --glow). */
+@utility glow {
+  box-shadow: 0 0 36px -6px color-mix(in oklab, var(--glow, var(--primary)) 55%, transparent);
+}
+
+/* ---------- Vidro nos componentes base (via data-slot) ---------------------------------- */
+/* Regras sem camada vencem as utilities do Tailwind, então nenhum componente precisa mudar. */
+
+[data-slot='button'] {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.18s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    filter 0.2s,
+    background-color 0.2s;
+}
+
+/* Reflexo que atravessa o botão no hover. */
+[data-slot='button']:not([data-variant='link']):not([data-variant='ghost'])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.38) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease-out);
+  pointer-events: none;
+}
+[data-slot='button']:not([data-variant='link']):not([data-variant='ghost']):hover::after {
+  transform: translateX(120%);
+}
+
+[data-slot='button'][data-variant='default'] {
+  color: var(--primary-foreground);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 90%, white) 0%,
+    var(--primary) 45%,
+    color-mix(in oklab, var(--primary) 55%, var(--sky)) 100%
+  );
+  border: 1px solid rgb(255 255 255 / 0.4);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    inset 0 -6px 12px -6px rgb(0 0 0 / 0.18),
+    0 8px 22px -6px color-mix(in oklab, var(--primary) 60%, transparent);
+  backdrop-filter: blur(10px) saturate(170%);
+}
+[data-slot='button'][data-variant='default']:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07) saturate(1.1);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 0 -6px 12px -6px rgb(0 0 0 / 0.18),
+    0 12px 28px -6px color-mix(in oklab, var(--primary) 75%, transparent);
+}
+[data-slot='button']:active {
+  transform: translateY(0) scale(0.98);
+}
+
+[data-slot='button'][data-variant='outline'],
+[data-slot='button'][data-variant='secondary'] {
+  color: var(--foreground);
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.12), transparent 60%),
+    var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 6px 18px -8px var(--glass-shadow);
+  backdrop-filter: blur(16px) saturate(170%);
+}
+[data-slot='button'][data-variant='outline']:hover,
+[data-slot='button'][data-variant='secondary']:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+}
+
+[data-slot='button'][data-variant='ghost']:hover {
+  background: var(--glass-bg);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(12px) saturate(160%);
+}
+
+[data-slot='button'][data-variant='destructive'] {
+  color: var(--destructive);
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.1), transparent 60%),
+    color-mix(in oklab, var(--destructive) 18%, transparent);
+  border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+}
+
+/* Abas: trilho de vidro e aba ativa com cor. */
+[data-slot='tabs-list'] {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 6px 18px -10px var(--glass-shadow);
+  backdrop-filter: blur(18px) saturate(170%);
+}
+[data-slot='tabs-trigger'][data-state='active'] {
+  color: var(--foreground);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+[data-slot='tabs-trigger'] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Campos */
+[data-slot='input'],
+[data-slot='textarea'],
+[data-slot='select-trigger'] {
+  background: color-mix(in oklab, var(--card) 45%, transparent);
+  border-color: var(--glass-border);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.08);
+  backdrop-filter: blur(10px) saturate(150%);
+}
+[data-slot='input']:focus-visible,
+[data-slot='textarea']:focus-visible,
+[data-slot='select-trigger']:focus-visible {
+  border-color: var(--primary);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--primary) 28%, transparent),
+    0 0 24px -4px color-mix(in oklab, var(--primary) 45%, transparent);
+}
+
+[data-slot='checkbox'][data-state='checked'] {
+  background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 55%, var(--sky)));
+  border-color: transparent;
+  box-shadow: 0 0 14px -2px color-mix(in oklab, var(--primary) 70%, transparent);
+}
+
+/* Camadas flutuantes: vidro forte. */
+[data-slot='dialog-content'],
+[data-slot='sheet-content'],
+[data-slot='popover-content'],
+[data-slot='dropdown-menu-content'],
+[data-slot='dropdown-menu-sub-content'],
+[data-slot='select-content'],
+[data-slot='tooltip-content'] {
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.1), transparent 55%),
+    var(--glass-bg-strong);
+  color: var(--foreground);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 28px 70px -18px var(--glass-shadow);
+  backdrop-filter: blur(34px) saturate(190%);
+  -webkit-backdrop-filter: blur(34px) saturate(190%);
+}
+
+[data-slot='dialog-overlay'],
+[data-slot='sheet-overlay'] {
+  background: color-mix(in oklab, var(--canvas) 55%, transparent);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+}
+
+[data-slot='dropdown-menu-item']:focus,
+[data-slot='select-item']:focus,
+[data-slot='command-item'][data-selected='true'] {
+  background: color-mix(in oklab, var(--primary) 20%, transparent);
+  color: var(--foreground);
+}
+
+/* Avisos (sonner) */
+[data-sonner-toast] {
+  background:
+    linear-gradient(140deg, rgb(255 255 255 / 0.1), transparent 55%),
+    var(--glass-bg-strong) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    0 20px 50px -16px var(--glass-shadow) !important;
+}
+
+/* Barra de rolagem discreta dentro do vidro */
+.scrollbar-glass {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent) transparent;
+}
+
+/* Quando o navegador não suporta backdrop-filter, o fundo fica mais opaco (leitura garantida). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --glass-bg: color-mix(in oklab, var(--card) 92%, transparent);
+    --glass-bg-strong: var(--popover);
+  }
+}
+
+/* Quem prefere menos movimento fica com a aurora parada. */
+@media (prefers-reduced-motion: reduce) {
+  .aurora > i {
+    animation: none;
+  }
+}
+
+/* Barra superior: vidro translúcido que deixa a cor do conteúdo passar por baixo. */
+.glass-bar {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.1), transparent),
+    color-mix(in oklab, var(--card) 38%, transparent);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+
+/* ======================================================================================== */
+/* Liquid glass: a lente de vidro que desliza até o item ativo                              */
+/* ======================================================================================== */
+
+/* Permite que a cor da lente "derreta" de um tom para outro ao trocar de grupo. */
+@property --ind-tone {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #69d4be;
+}
+
+[data-liquid] {
+  --spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --glide: cubic-bezier(0.32, 0.72, 0, 1);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Os itens ficam sob a lente: ela refrata e tinge o que passa por baixo. */
+[data-liquid]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  width: var(--ind-w, 0px);
+  height: var(--ind-h, 0px);
+  opacity: var(--ind-o, 0);
+  border-radius: var(--ind-r, 14px);
+  transform: translate3d(var(--ind-x, 0px), var(--ind-y, 0px), 0);
+  transform-origin: center;
+  /* corpo da lente: brilho especular no canto, cor do grupo embaixo */
+  background:
+    radial-gradient(130% 150% at 14% 6%, rgb(255 255 255 / 0.34), transparent 44%),
+    radial-gradient(90% 120% at 92% 110%, color-mix(in oklab, var(--ind-tone) 46%, transparent), transparent 62%),
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ind-tone) 17%, rgb(255 255 255 / 0.06)),
+      color-mix(in oklab, var(--ind-tone) 6%, transparent)
+    );
+  /* aro de luz: borda clara em cima/esquerda, sombra interna em baixo/direita */
+  box-shadow:
+    inset 0 1.5px 1px rgb(255 255 255 / 0.75),
+    inset 1px 0 1px rgb(255 255 255 / 0.25),
+    inset 0 -1.5px 2px rgb(255 255 255 / 0.14),
+    inset 0 0 20px color-mix(in oklab, var(--ind-tone) 32%, transparent),
+    0 8px 20px -10px color-mix(in oklab, var(--ind-tone) 60%, transparent),
+    0 1px 4px rgb(0 0 0 / 0.16);
+  /* Safari/Firefox: sem refração, só vidro fosco */
+  backdrop-filter: saturate(220%) brightness(1.12);
+  -webkit-backdrop-filter: saturate(220%) brightness(1.12);
+  /* Chromium: refração líquida real (filtro SVG #liquid-lens em AppShell) */
+  backdrop-filter: url(#liquid-lens) saturate(220%) brightness(1.12);
+  transition:
+    transform 0.42s var(--glide),
+    width 0.42s var(--glide),
+    height 0.42s var(--glide),
+    opacity 0.25s ease,
+    scale 0.38s var(--spring),
+    --ind-tone 0.35s ease,
+    border-radius 0.4s ease;
+}
+
+/* Em movimento a lente estica na direção do deslocamento; ao parar, assenta com mola. */
+[data-liquid='y'][data-moving]::after {
+  scale: 1.02 1.07;
+  transition:
+    transform 0.42s var(--glide),
+    width 0.42s var(--glide),
+    height 0.42s var(--glide),
+    opacity 0.25s ease,
+    scale 0.2s ease-out,
+    --ind-tone 0.35s ease,
+    border-radius 0.4s ease;
+}
+[data-liquid='x'][data-moving]::after {
+  scale: 1.07 1.03;
+  transition:
+    transform 0.42s var(--glide),
+    width 0.42s var(--glide),
+    height 0.42s var(--glide),
+    opacity 0.25s ease,
+    scale 0.2s ease-out,
+    --ind-tone 0.35s ease,
+    border-radius 0.4s ease;
+}
+
+/* A primeira posição não anima a partir do canto. */
+[data-liquid]:not([data-ready])::after {
+  transition: none;
+}

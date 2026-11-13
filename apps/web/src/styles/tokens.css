@@ -1,0 +1,323 @@
+/*
+ * RITMO design tokens.
+ * Source of truth: docs/DESIGN_SYSTEM.md — keep the two in sync.
+ * Components must use these tokens (via Tailwind utilities), never raw colour values.
+ */
+
+@theme {
+  /* Famílias */
+  --font-sans:
+    'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif:
+    'Newsreader Variable', 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia,
+    'Times New Roman', serif;
+  --font-mono:
+    ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Escala tipográfica (tamanho + entrelinha) */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.5rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 3rem;
+
+  /* Pesos */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Espaçamento entre letras */
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.06em;
+
+  /* Curvas de animação */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Grade de 4 px e medidas do shell */
+  --spacing: 0.25rem;
+  --spacing-sidebar: 15.5rem;
+  --spacing-rail: 4rem;
+  --spacing-header: 3.5rem;
+  --spacing-bottom-nav: 4rem;
+  --spacing-aside: 21rem;
+  --spacing-touch: 2.75rem;
+
+  /* Larguras de conteúdo */
+  --container-reading: 42.5rem;
+  --container-content: 72rem;
+  --container-wide: 90rem;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --shadow-sm: var(--elevation-1);
+  --shadow-md: var(--elevation-2);
+  --shadow-lg: var(--elevation-3);
+
+  --color-canvas: var(--canvas);
+  --color-violet: var(--violet);
+  --color-coral: var(--coral);
+  --color-sky: var(--sky);
+  --color-amber: var(--amber);
+  --color-cyan: var(--cyan);
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-muted: var(--muted);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-area-trabalho: var(--area-trabalho);
+  --color-area-estudos: var(--area-estudos);
+  --color-area-programacao: var(--area-programacao);
+  --color-area-ingles: var(--area-ingles);
+  --color-area-academia: var(--area-academia);
+  --color-area-espiritualidade: var(--area-espiritualidade);
+  --color-area-leitura: var(--area-leitura);
+  --color-area-pessoal: var(--area-pessoal);
+  --color-area-outros: var(--area-outros);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-neutral: var(--chart-neutral);
+  --color-primary-soft: var(--primary-soft);
+  --color-success-soft: var(--success-soft);
+  --color-warning-soft: var(--warning-soft);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-info-soft: var(--info-soft);
+  --color-overlay: var(--overlay);
+}
+
+/* Tema claro */
+:root {
+  color-scheme: light;
+  --radius: 0.75rem;
+  /* Fundo do app: a "moldura" em volta do painel principal */
+  --canvas: #ebe9e5;
+  /* Acentos de apoio (cor de destaque por grupo, brilhos e gradientes) */
+  --violet: #6a4cd8;
+  --coral: #d4513f;
+  --sky: #2a6fd0;
+  --amber: #a86a00;
+  --cyan: #0b8f86;
+  /* Aurora (fundo atrás do vidro) */
+  --aurora-1: #ffffff;
+  --aurora-2: #d9d6cf;
+  --aurora-3: #ffffff;
+  --aurora-4: #cfcbc3;
+  --aurora-opacity: 0.7;
+  /* Vidro */
+  --glass-bg: rgb(255 255 255 / 0.5);
+  --glass-bg-strong: rgb(255 255 255 / 0.78);
+  --glass-border: rgb(255 255 255 / 0.7);
+  --glass-edge-a: rgb(255 255 255 / 1);
+  --glass-edge-b: rgb(90 80 70 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.95);
+  --glass-shadow: rgb(40 34 28 / 0.16);
+  /* Movimento */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  /* Superfícies */
+  --background: #f9f6f2;
+  --card: #fefdfb;
+  --popover: #fefdfb;
+  --muted: #efece8;
+  --secondary: #ece9e4;
+  --accent: #ece9e4;
+  /* Texto */
+  --foreground: #211f1b;
+  --card-foreground: #211f1b;
+  --popover-foreground: #211f1b;
+  --secondary-foreground: #211f1b;
+  --accent-foreground: #211f1b;
+  --muted-foreground: #58554f;
+  --subtle-foreground: #68645e;
+  /* Contornos */
+  --border: #dfdcd6;
+  --input: #898680;
+  --ring: #066a5b;
+  /* Acento (jade) */
+  --primary: #066a5b;
+  --primary-foreground: #f2fdfa;
+  /* Semânticas */
+  --destructive: #ba2b28;
+  --destructive-foreground: #fffbfa;
+  --success: #21763c;
+  --warning: #915c08;
+  --info: #2a669f;
+  /* Sidebar */
+  --sidebar: #f2f0eb;
+  --sidebar-foreground: #211f1b;
+  --sidebar-primary: #066a5b;
+  --sidebar-primary-foreground: #f2fdfa;
+  --sidebar-accent: #e6e3dc;
+  --sidebar-accent-foreground: #211f1b;
+  --sidebar-border: #e2dfda;
+  --sidebar-ring: #066a5b;
+  /* Áreas da vida */
+  --area-trabalho: #2e5a9a;
+  --area-estudos: #805c00;
+  --area-programacao: #5d4c95;
+  --area-ingles: #b95e84;
+  --area-academia: #8d4302;
+  --area-espiritualidade: #0084a7;
+  --area-leitura: #48660f;
+  --area-pessoal: #ab6ca9;
+  --area-outros: #5f5d5a;
+  /* Gráficos */
+  --chart-1: #008472;
+  --chart-2: #8d4302;
+  --chart-3: #2e5a9a;
+  --chart-4: #805c00;
+  --chart-5: #ab6ca9;
+  --chart-neutral: #5f5d5a;
+  /* Tons suaves (fundo de seleção, avisos, bloco ativo) */
+  --primary-soft: color-mix(in oklab, var(--primary) 14%, var(--card));
+  --success-soft: color-mix(in oklab, var(--success) 14%, var(--card));
+  --warning-soft: color-mix(in oklab, var(--warning) 14%, var(--card));
+  --destructive-soft: color-mix(in oklab, var(--destructive) 14%, var(--card));
+  --info-soft: color-mix(in oklab, var(--info) 14%, var(--card));
+  /* Elevação */
+  --elevation-1: 0 1px 2px rgb(33 31 27 / 0.06);
+  --elevation-2: 0 1px 2px rgb(33 31 27 / 0.05), 0 6px 16px -4px rgb(33 31 27 / 0.1);
+  --elevation-3: 0 2px 4px rgb(33 31 27 / 0.05), 0 20px 48px -12px rgb(33 31 27 / 0.22);
+  --overlay: rgb(33 31 27 / 0.32);
+}
+
+/* Tema escuro (principal) */
+.dark {
+  color-scheme: dark;
+  --canvas: #0b0b0c;
+  --violet: #a78bfa;
+  --coral: #ff8a7a;
+  --sky: #6cb6ff;
+  --amber: #ffc266;
+  --cyan: #5eead4;
+  --aurora-1: #8d8d93;
+  --aurora-2: #5d5d63;
+  --aurora-3: #3d3d42;
+  --aurora-4: #6d6d73;
+  --aurora-opacity: 0.2;
+  --glass-bg: rgb(40 39 38 / 0.5);
+  --glass-bg-strong: rgb(30 29 28 / 0.8);
+  --glass-border: rgb(255 255 255 / 0.12);
+  --glass-edge-a: rgb(255 255 255 / 0.55);
+  --glass-edge-b: rgb(255 255 255 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.2);
+  --glass-shadow: rgb(0 0 0 / 0.45);
+  /* Superfícies */
+  --background: #171614;
+  --card: #1f1d1b;
+  --popover: #262422;
+  --muted: #262422;
+  --secondary: #2c2b28;
+  --accent: #2c2b28;
+  /* Texto */
+  --foreground: #edebe7;
+  --card-foreground: #edebe7;
+  --popover-foreground: #edebe7;
+  --secondary-foreground: #edebe7;
+  --accent-foreground: #edebe7;
+  --muted-foreground: #b8b5b0;
+  --subtle-foreground: #9f9c97;
+  /* Contornos */
+  --border: #33312e;
+  --input: #7b7874;
+  --ring: #69d4be;
+  /* Acento (jade) */
+  --primary: #69d4be;
+  --primary-foreground: #011b16;
+  /* Semânticas */
+  --destructive: #f87e77;
+  --destructive-foreground: #200e0d;
+  --success: #76cf8a;
+  --warning: #edbb64;
+  --info: #86beee;
+  /* Sidebar */
+  --sidebar: #12110f;
+  --sidebar-foreground: #edebe7;
+  --sidebar-primary: #69d4be;
+  --sidebar-primary-foreground: #011b16;
+  --sidebar-accent: #22201e;
+  --sidebar-accent-foreground: #edebe7;
+  --sidebar-border: #242320;
+  --sidebar-ring: #69d4be;
+  /* Áreas da vida */
+  --area-trabalho: #5381c4;
+  --area-estudos: #a87e24;
+  --area-programacao: #9787d6;
+  --area-ingles: #af557b;
+  --area-academia: #cf7e4b;
+  --area-espiritualidade: #008eb3;
+  --area-leitura: #668736;
+  --area-pessoal: #bb7bb9;
+  --area-outros: #767471;
+  /* Gráficos */
+  --chart-1: #31ab95;
+  --chart-2: #cf7e4b;
+  --chart-3: #5381c4;
+  --chart-4: #a87e24;
+  --chart-5: #bb7bb9;
+  --chart-neutral: #767471;
+  /* Tons suaves (fundo de seleção, avisos, bloco ativo) */
+  --primary-soft: color-mix(in oklab, var(--primary) 14%, var(--card));
+  --success-soft: color-mix(in oklab, var(--success) 14%, var(--card));
+  --warning-soft: color-mix(in oklab, var(--warning) 14%, var(--card));
+  --destructive-soft: color-mix(in oklab, var(--destructive) 14%, var(--card));
+  --info-soft: color-mix(in oklab, var(--info) 14%, var(--card));
+  /* Elevação */
+  --elevation-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --elevation-2: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 20px -6px rgb(0 0 0 / 0.5);
+  --elevation-3: 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 56px -12px rgb(0 0 0 / 0.65);
+  --overlay: rgb(0 0 0 / 0.56);
+}
