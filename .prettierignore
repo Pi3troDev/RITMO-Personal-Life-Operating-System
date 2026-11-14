@@ -3,3 +3,6 @@ dist
 package-lock.json
 docs/design/preview.html
 apps/web/public/mockServiceWorker.js
+apps/api/src/generated
+apps/api/prisma/migrations
+.data

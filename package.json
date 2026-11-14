@@ -14,7 +14,17 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:api": "npm run dev -w @ritmo/api",
+    "dev:web": "npm run dev -w @ritmo/web",
+    "db:start": "node scripts/db.mjs start",
+    "db:stop": "node scripts/db.mjs stop",
+    "db:status": "node scripts/db.mjs status",
+    "db:migrate": "npm run db:migrate -w @ritmo/api",
+    "db:deploy": "npm run db:deploy -w @ritmo/api",
+    "db:generate": "npm run db:generate -w @ritmo/api",
+    "openapi": "npm run openapi -w @ritmo/api",
+    "setup": "npm install && node -e \"const fs=require('fs');if(!fs.existsSync('apps/api/.env'))fs.copyFileSync('apps/api/.env.example','apps/api/.env')\" && npm run db:start && npm run db:generate && npm run db:deploy"
   },
   "engines": {
     "node": ">=22"

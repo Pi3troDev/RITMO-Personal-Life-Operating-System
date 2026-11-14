@@ -11,3 +11,9 @@ Thumbs.db
 *.tsbuildinfo
 playwright-report/
 test-results/
+
+# Banco de desenvolvimento local (MariaDB do projeto) e Prisma Client gerado
+.data/
+apps/api/src/generated/
+# Gerado por `npm run openapi -w @ritmo/api`; o Swagger serve o documento ao vivo
+apps/api/openapi.json
