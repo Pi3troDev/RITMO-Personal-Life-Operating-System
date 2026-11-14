@@ -73,7 +73,12 @@ export const createTaskInputSchema = z.object({
   columnId: idSchema.optional(),
   dueDate: dateSchema.nullish(),
   scheduledStart: dateTimeSchema.nullish(),
-  estimateMinutes: z.number().int().positive().max(24 * 60).nullish(),
+  estimateMinutes: z
+    .number()
+    .int()
+    .positive()
+    .max(24 * 60)
+    .nullish(),
   tags: z.array(z.string().trim().min(1).max(30)).max(10).optional(),
   checklist: z.array(z.object({ title: z.string().trim().min(1).max(200) })).optional(),
   recurrence: z.string().nullish(),
@@ -125,3 +130,23 @@ export const createColumnInputSchema = z.object({
   statusCategory: taskStatusSchema,
 });
 export type CreateColumnInput = z.infer<typeof createColumnInputSchema>;
+
+export const updateBoardInputSchema = createBoardInputSchema;
+export type UpdateBoardInput = z.infer<typeof updateBoardInputSchema>;
+
+export const updateColumnInputSchema = z.object({
+  name: z.string().trim().min(1).max(40).optional(),
+  position: z.number().optional(),
+});
+export type UpdateColumnInput = z.infer<typeof updateColumnInputSchema>;
+
+/** Filtros de `GET /tasks`. */
+export const listTasksQuerySchema = z.object({
+  view: taskViewSchema.optional(),
+  projectId: idSchema.optional(),
+  goalId: idSchema.optional(),
+  areaId: idSchema.optional(),
+  boardId: idSchema.optional(),
+  q: z.string().trim().max(100).optional(),
+});
+export type ListTasksQuery = z.infer<typeof listTasksQuerySchema>;

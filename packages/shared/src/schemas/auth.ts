@@ -37,3 +37,30 @@ export const authSessionSchema = z.object({
   user: userSchema,
 });
 export type AuthSession = z.infer<typeof authSessionSchema>;
+
+export const updateProfileInputSchema = z.object({
+  name: z.string().trim().min(2, 'Informe seu nome').max(80).optional(),
+  timezone: z.string().min(1).max(64).optional(),
+  weekStartsOn: z.union([z.literal(0), z.literal(1)]).optional(),
+  dailyCapacityMinutes: z
+    .number()
+    .int()
+    .min(30)
+    .max(24 * 60)
+    .optional(),
+});
+export type UpdateProfileInput = z.infer<typeof updateProfileInputSchema>;
+
+export const changePasswordInputSchema = z.object({
+  currentPassword: z.string().min(1, 'Informe a senha atual'),
+  newPassword: z
+    .string()
+    .min(PASSWORD_MIN_LENGTH, `A senha precisa ter pelo menos ${PASSWORD_MIN_LENGTH} caracteres`)
+    .max(128),
+});
+export type ChangePasswordInput = z.infer<typeof changePasswordInputSchema>;
+
+export const deleteAccountInputSchema = z.object({
+  password: z.string().min(1, 'Informe sua senha para confirmar'),
+});
+export type DeleteAccountInput = z.infer<typeof deleteAccountInputSchema>;

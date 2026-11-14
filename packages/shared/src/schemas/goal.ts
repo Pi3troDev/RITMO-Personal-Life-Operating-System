@@ -145,3 +145,7 @@ export const updateVisionItemInputSchema = createVisionItemInputSchema.partial()
   achieved: z.boolean().optional(),
 });
 export type UpdateVisionItemInput = z.infer<typeof updateVisionItemInputSchema>;
+
+/** Valor atual informado à mão para métricas sem fonte automática (ex.: livros lidos). */
+export const setMetricCurrentInputSchema = z.object({ current: z.number().nonnegative() });
+export type SetMetricCurrentInput = z.infer<typeof setMetricCurrentInputSchema>;

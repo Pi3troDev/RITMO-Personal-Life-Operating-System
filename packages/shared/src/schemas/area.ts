@@ -39,3 +39,19 @@ export const DEFAULT_AREAS: ReadonlyArray<Pick<Area, 'name' | 'color' | 'icon'>>
   { name: 'Pessoal', color: 'pessoal', icon: 'user' },
   { name: 'Outros', color: 'outros', icon: 'shapes' },
 ];
+
+export const createAreaInputSchema = z.object({
+  name: z.string().trim().min(1, 'Dê um nome à área').max(60),
+  color: areaColorSchema,
+  icon: z.string().trim().min(1).max(48).optional(),
+});
+export type CreateAreaInput = z.infer<typeof createAreaInputSchema>;
+
+export const updateAreaInputSchema = z.object({
+  name: z.string().trim().min(1).max(60).optional(),
+  color: areaColorSchema.optional(),
+  icon: z.string().trim().min(1).max(48).optional(),
+  position: z.number().int().optional(),
+  archived: z.boolean().optional(),
+});
+export type UpdateAreaInput = z.infer<typeof updateAreaInputSchema>;

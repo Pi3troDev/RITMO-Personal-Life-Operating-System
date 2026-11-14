@@ -120,3 +120,53 @@ export const financeOverviewSchema = z.object({
   budgets: z.array(budgetSchema),
 });
 export type FinanceOverview = z.infer<typeof financeOverviewSchema>;
+
+export const updateAccountInputSchema = createAccountInputSchema.partial().extend({
+  archived: z.boolean().optional(),
+});
+export type UpdateAccountInput = z.infer<typeof updateAccountInputSchema>;
+
+export const createFinanceCategoryInputSchema = z.object({
+  name: z.string().trim().min(1, 'Dê um nome à categoria').max(60),
+  kind: z.enum(['income', 'expense']),
+  icon: z.string().trim().min(1).max(48).optional(),
+});
+export type CreateFinanceCategoryInput = z.infer<typeof createFinanceCategoryInputSchema>;
+
+export const updateFinanceCategoryInputSchema = z.object({
+  name: z.string().trim().min(1).max(60).optional(),
+  icon: z.string().trim().min(1).max(48).optional(),
+});
+export type UpdateFinanceCategoryInput = z.infer<typeof updateFinanceCategoryInputSchema>;
+
+export const updateTransactionInputSchema = z.object({
+  description: z.string().trim().min(1).max(120).optional(),
+  amountCents: centsSchema.positive().optional(),
+  date: dateSchema.optional(),
+  categoryId: idSchema.nullish(),
+  accountId: idSchema.optional(),
+  toAccountId: idSchema.nullish(),
+  note: z.string().max(500).nullish(),
+});
+export type UpdateTransactionInput = z.infer<typeof updateTransactionInputSchema>;
+
+export const listTransactionsQuerySchema = z.object({
+  month: monthSchema.optional(),
+  accountId: idSchema.optional(),
+  categoryId: idSchema.optional(),
+  type: transactionTypeSchema.optional(),
+});
+export type ListTransactionsQuery = z.infer<typeof listTransactionsQuerySchema>;
+
+/** Saldo projetado de uma conta-reserva: quando o ritmo de aportes chega à meta. */
+export const reserveProjectionSchema = z.object({
+  goalId: idSchema,
+  accountId: idSchema,
+  targetCents: centsSchema,
+  balanceCents: centsSchema,
+  /** Média mensal de aportes líquidos nos últimos 3 meses. */
+  monthlyPaceCents: centsSchema,
+  /** `YYYY-MM-DD` estimado, ou nulo quando não há ritmo para projetar. */
+  projectedDate: dateSchema.nullable(),
+});
+export type ReserveProjection = z.infer<typeof reserveProjectionSchema>;

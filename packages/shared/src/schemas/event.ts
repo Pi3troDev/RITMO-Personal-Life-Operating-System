@@ -53,3 +53,9 @@ export const updateEventInputSchema = z.object({
   status: z.enum(['scheduled', 'done', 'cancelled']).optional(),
 });
 export type UpdateEventInput = z.infer<typeof updateEventInputSchema>;
+
+/** Marca uma ocorrência isolada de uma série (cancelada, feita ou de volta ao normal). */
+export const setOccurrenceInputSchema = z.object({
+  status: z.enum(['scheduled', 'done', 'cancelled']),
+});
+export type SetOccurrenceInput = z.infer<typeof setOccurrenceInputSchema>;

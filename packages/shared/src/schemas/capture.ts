@@ -39,3 +39,27 @@ export const captureResultSchema = z.discriminatedUnion('destination', [
   z.object({ destination: z.literal('inbox'), item: inboxItemSchema }),
 ]);
 export type CaptureResult = z.infer<typeof captureResultSchema>;
+
+/** Transforma um item da caixa de entrada em um item real. */
+export const convertInboxInputSchema = z.discriminatedUnion('to', [
+  z.object({ to: z.literal('task') }),
+  z.object({
+    to: z.literal('event'),
+    start: dateTimeSchema,
+    end: dateTimeSchema,
+  }),
+  z.object({
+    to: z.literal('goal'),
+    category: z.enum([
+      'financial',
+      'professional',
+      'academic',
+      'intellectual',
+      'health',
+      'spiritual',
+      'personal',
+      'relationships',
+    ]),
+  }),
+]);
+export type ConvertInboxInput = z.infer<typeof convertInboxInputSchema>;
