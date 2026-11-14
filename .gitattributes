@@ -1,0 +1,5 @@
+* text=auto
+# O Prisma calcula o checksum das migrações sobre o conteúdo do arquivo: LF sempre, em qualquer sistema.
+*.sql text eol=lf
+*.prisma text eol=lf
+*.sh text eol=lf
