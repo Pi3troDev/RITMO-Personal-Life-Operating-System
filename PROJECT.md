@@ -1,6 +1,7 @@
 # RITMO — Personal Life Operating System
 
-> Status: **planejamento — aguardando aprovação**. Nenhum código de aplicação foi escrito.
+> Status: **API completa e documentada (Swagger); front em modo demonstração, aguardando a ligação com a API.**
+> Como rodar: [`apps/api/README.md`](apps/api/README.md) · Acompanhamento: [`TASKS.md`](TASKS.md).
 > Briefing original do produto: [`docs/BRIEF.md`](docs/BRIEF.md).
 > Modelo de dados: [`docs/DATABASE.md`](docs/DATABASE.md) · Design system: [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) · Acompanhamento: [`TASKS.md`](TASKS.md).
 
@@ -334,6 +335,14 @@ O trabalho é coordenado com workers do Orca:
 | D20 | Capas de livros e materiais apenas por link | Sem upload de arquivos nesta versão |
 | D21 | Visual "liquid glass" feito para web (backdrop-filter + indicador deslizante), fundo neutro, cor nos elementos | `expo-glass-effect` é nativo (iOS/React Native) e não roda em React web; o fundo colorido foi rejeitado pelo dono do produto |
 | D22 | O botão de adição rápida se chama "Adicionar" (atalho `A`) | "Capturar" foi rejeitado pelo dono do produto |
+| D23 | MariaDB de desenvolvimento próprio do projeto (`.data/mariadb`, porta 3310) em vez do serviço instalado | O serviço local exige uma senha de root que o repositório não conhece; assim `npm run setup` funciona em qualquer máquina e não interfere em outros bancos |
+| D24 | Valores dos enums do Prisma iguais aos do contrato em `packages/shared` (`in_progress`, `skipped`…) | Elimina a camada de tradução banco ↔ API, fonte clássica de bug |
+| D25 | Uma definição por rota (`route()`) gera roteamento, validação e OpenAPI; o Swagger nunca fica defasado | Documentação e código não podem divergir; um teste confere que toda rota está documentada e que o documento é válido |
+| D26 | Registro de tempo (`TimeEntry`) é o livro-razão único: leitura, treino e oração com minutos geram/atualizam/apagam o próprio registro | Atende a "cada módulo alimenta TimeEntry" sem duplicar a regra de relatórios |
+| D27 | Histórico de progresso de objetivo gravado ao consultar (no máximo 1 ponto por dia) | Mantém o gráfico de evolução sem job agendado; é idempotente |
+| D28 | Refresh token com janela de 10 s só para rotação normal (`rotatedAt`); logout, troca de senha e revogação por reuso nunca têm tolerância | Evita derrubar a sessão em corrida entre abas sem abrir brecha para token revogado |
+| D29 | Anotações livres (`Note`) e metas semanais (`PeriodicTarget`) genéricas por módulo, em vez de uma tabela por módulo | Cobre ideias de dev, reflexões e anotações de leitura com um modelo só |
+| D30 | Listas aninhadas pequenas (checklist, tags, exercícios de treino, séries) guardadas como JSON | São sempre lidas e gravadas junto com o dono e nunca consultadas isoladamente |
 
 ## 9. Riscos e pendências
 

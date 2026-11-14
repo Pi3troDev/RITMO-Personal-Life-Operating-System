@@ -43,6 +43,35 @@ inspeção visual em desktop (escuro e claro) e em 390 px (iframe).
 - [ ] Pendente da Fase 2: arrastar e soltar na agenda e na timeline, editar tarefa, exceções de uma ocorrência recorrente
 - [ ] Testes de componente e ponta a ponta (Testing Library/Playwright) ainda não escritos
 
+## API (`apps/api`) — entregue
+
+Express 5 + Prisma 7 + MariaDB, documentada em Swagger (`/api/docs`). 193 operações em 120 caminhos, 27 grupos.
+Verificado: `tsc` sem erros, ESLint sem erros, **218 testes** passando (unitários + integração contra MariaDB
+real), documento OpenAPI validado por validador externo (`@apidevtools/swagger-parser`) e fluxo
+cadastro → tarefa → dia → refresh exercitado no servidor em execução. Detalhes em [`apps/api/README.md`](apps/api/README.md).
+
+- [x] Monorepo: `apps/api` + `packages/shared` (contratos Zod únicos para API e front)
+- [x] Banco: MariaDB de desenvolvimento do projeto (`npm run db:start`, porta 3310), Prisma 7, 4 migrações versionadas
+- [x] Núcleo: `route()` declarativo (roteamento + validação + OpenAPI), erros padronizados, `helmet`, CORS, limite de tentativas, logs sem dados sensíveis
+- [x] Autenticação: cadastro (já cria áreas, quadro, categorias), login, refresh rotativo com detecção de reuso, logout, logout em todos os dispositivos, troca de senha, exclusão de conta
+- [x] Conta: perfil, fuso, preferências (tema, moeda), módulos ativos
+- [x] Áreas, Quadros Kanban (colunas protegidas), Tarefas (checklist, tags, recorrência RRULE, próxima ocorrência ao concluir), Projetos
+- [x] Agenda: série recorrente expandida na leitura, exceção por ocorrência, conflitos, tarefas com bloco, fuso do usuário
+- [x] Meu Dia: visão do dia, foco (até 3), carga × capacidade, reflexão, reagendar pendências; caixa de entrada com conversão
+- [x] Hábitos (sequência sem punição, dia excepcional), Objetivos (marcos, métrica ligada a reserva/horas/check-ins, histórico, Visão do ano)
+- [x] Finanças: contas/reservas, transferência que nunca é receita/despesa, orçamento, visão do mês, projeção da reserva
+- [x] Registro de tempo: cronômetro com pausa e lançamento manual; leitura, treino e oração alimentam o mesmo livro-razão
+- [x] Estudos, Dev Space, Inglês, Leitura, Saúde, Espiritualidade, anotações e metas semanais por módulo
+- [x] Revisões semanal e mensal (métricas congeladas ao concluir), Insights determinísticos com evidência, relatórios de tempo e evolução
+- [x] Notificações: central, preferências, lembretes automáticos (compromisso, prazo, hábito, revisão, objetivo), base de web push
+- [x] Exportação dos dados do usuário em JSON
+- [x] Testes de isolamento: uma verificação por rota de que o usuário B não lê, altera nem apaga dados do usuário A
+- [ ] **Ligar o front à API** (trocar o MSW pelo cliente real, módulo por módulo) e criar as telas dos módulos ainda "em breve"
+- [ ] Telas de Revisões, Insights, Notificações e Configurações
+- [ ] Recuperação de senha e verificação de e-mail (D18, exigem envio de e-mail)
+- [ ] Dockerfiles + `docker-compose.yml` (não verificável nesta máquina)
+- [ ] Testes ponta a ponta (Playwright) front + API
+
 ## Fase 1 — Foundation
 
 Configuração
@@ -138,5 +167,5 @@ Fechamento
 ## Pendências com o dono do produto
 
 - [ ] Aprovar o plano (ou pedir ajustes)
-- [ ] Informar usuário e senha do MariaDB local para criar os bancos de desenvolvimento e teste
-- [ ] Definir se os commits podem ser feitos e enviados ao GitHub ao fim de cada fase
+- [x] ~~Informar usuário e senha do MariaDB local~~ — a API usa um MariaDB próprio do projeto (`npm run db:start`, porta 3310), sem tocar no serviço instalado. Se preferir o serviço da máquina, basta apontar `DATABASE_URL` em `apps/api/.env`
+- [x] Commits e envio ao GitHub autorizados (commits detalhados, sem assinatura do assistente)
