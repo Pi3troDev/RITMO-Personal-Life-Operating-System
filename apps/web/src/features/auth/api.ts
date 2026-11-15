@@ -39,7 +39,8 @@ export function useSessionExpiry() {
 export function useLogin() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: LoginInput) => api.post('/auth/login', input, { schema: authSessionSchema }),
+    mutationFn: (input: LoginInput) =>
+      api.post('/auth/login', input, { schema: authSessionSchema }),
     onSuccess: (session) => {
       setAccessToken(session.accessToken);
       queryClient.setQueryData(sessionKey, session.user);
