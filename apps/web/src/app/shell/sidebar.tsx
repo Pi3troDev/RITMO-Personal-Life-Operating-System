@@ -1,8 +1,8 @@
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { NavLink } from 'react-router';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useSession } from '@/features/auth/api';
+import { ProfileAvatar } from '@/features/profile/profile-page';
 import { useLiquid } from '@/lib/use-liquid';
 import { cn } from '@/lib/utils';
 import { NAV_GROUPS, SYSTEM_ITEMS, TONE_VAR, type NavItem, type Tone } from '../navigation';
@@ -18,7 +18,15 @@ export function Logo({ compact = false }: { compact?: boolean }) {
             'linear-gradient(135deg, color-mix(in oklab, var(--primary) 85%, white), var(--primary) 50%, color-mix(in oklab, var(--primary) 50%, var(--violet)))',
         }}
       >
-        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          viewBox="0 0 24 24"
+          className="size-5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M3 12h3l2.5-6 4 12 2.5-6H21" />
         </svg>
       </span>
@@ -102,15 +110,11 @@ interface SidebarProps {
 export function Sidebar({ onNavigate, collapsed = false, onToggleCollapsed }: SidebarProps) {
   const { data: user } = useSession();
   const liquid = useLiquid<HTMLDivElement>('y');
-  const initials = (user?.name ?? '?')
-    .split(' ')
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join('');
-
   return (
     <nav aria-label="Principal" className="flex h-full flex-col gap-4 px-2.5 pb-3 pt-3.5">
-      <div className={cn('flex items-center', collapsed ? 'flex-col gap-3' : 'justify-between pr-1')}>
+      <div
+        className={cn('flex items-center', collapsed ? 'flex-col gap-3' : 'justify-between pr-1')}
+      >
         <Logo compact={collapsed} />
         {onToggleCollapsed ? (
           <button
@@ -119,7 +123,11 @@ export function Sidebar({ onNavigate, collapsed = false, onToggleCollapsed }: Si
             aria-label={collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
             className="flex size-8 items-center justify-center rounded-xl border border-transparent text-muted-foreground transition-colors hover:border-white/15 hover:bg-foreground/[0.07] hover:text-foreground"
           >
-            {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
+            {collapsed ? (
+              <PanelLeftOpen className="size-4" />
+            ) : (
+              <PanelLeftClose className="size-4" />
+            )}
           </button>
         ) : null}
       </div>
@@ -134,7 +142,13 @@ export function Sidebar({ onNavigate, collapsed = false, onToggleCollapsed }: Si
             )}
             <div className="flex flex-col gap-0.5">
               {group.items.map((item) => (
-                <NavEntry key={item.path} item={item} tone={group.tone} onNavigate={onNavigate} collapsed={collapsed} />
+                <NavEntry
+                  key={item.path}
+                  item={item}
+                  tone={group.tone}
+                  onNavigate={onNavigate}
+                  collapsed={collapsed}
+                />
               ))}
             </div>
           </div>
@@ -143,7 +157,13 @@ export function Sidebar({ onNavigate, collapsed = false, onToggleCollapsed }: Si
         <div className="border-t border-foreground/[0.08] pt-3">
           <div className="flex flex-col gap-0.5">
             {SYSTEM_ITEMS.map((item) => (
-              <NavEntry key={item.path} item={item} tone="primary" onNavigate={onNavigate} collapsed={collapsed} />
+              <NavEntry
+                key={item.path}
+                item={item}
+                tone="primary"
+                onNavigate={onNavigate}
+                collapsed={collapsed}
+              />
             ))}
           </div>
         </div>
@@ -151,17 +171,19 @@ export function Sidebar({ onNavigate, collapsed = false, onToggleCollapsed }: Si
 
       <div className="flex flex-col">
         {user && !collapsed ? (
-          <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-foreground/[0.04] px-2.5 py-2">
-            <Avatar className="size-8">
-              <AvatarFallback className="bg-gradient-to-br from-primary/60 to-violet/50 text-[11px] font-semibold text-foreground">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+          <NavLink
+            to="/configuracoes"
+            onClick={onNavigate}
+            className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-foreground/[0.04] px-2.5 py-2 transition-colors hover:bg-foreground/[0.08]"
+          >
+            <ProfileAvatar name={user.name} />
             <div className="min-w-0">
               <p className="truncate text-[13px] font-medium leading-tight">{user.name}</p>
-              <p className="truncate text-[11px] leading-tight text-subtle-foreground">{user.email}</p>
+              <p className="truncate text-[11px] leading-tight text-subtle-foreground">
+                {user.email}
+              </p>
             </div>
-          </div>
+          </NavLink>
         ) : null}
       </div>
     </nav>

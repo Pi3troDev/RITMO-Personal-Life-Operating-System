@@ -1,6 +1,5 @@
-import { LogOut } from 'lucide-react';
+import { LogOut, UserRound } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useLogout, useSession } from '@/features/auth/api';
+import { ProfileAvatar } from '@/features/profile/profile-page';
 
 export function UserMenu() {
   const { data: user } = useSession();
@@ -17,30 +17,31 @@ export function UserMenu() {
   const navigate = useNavigate();
   if (!user) return null;
 
-  const initials = user.name
-    .split(' ')
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join('');
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         aria-label="Menu da conta"
       >
-        <Avatar className="size-8">
-          <AvatarFallback className="bg-primary-soft text-xs font-medium">{initials}</AvatarFallback>
-        </Avatar>
+        <ProfileAvatar name={user.name} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="font-normal">
-          <p className="text-sm font-medium">{user.name}</p>
-          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        <DropdownMenuLabel className="flex items-center gap-3 font-normal">
+          <ProfileAvatar name={user.name} className="size-11 text-sm" />
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-medium">{user.name}</span>
+            <span className="block truncate text-xs text-muted-foreground">{user.email}</span>
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => navigate('/configuracoes')}>
+          <UserRound aria-hidden />
+          Meu perfil
+        </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => logout.mutate(undefined, { onSettled: () => navigate('/entrar', { replace: true }) })}
+          onSelect={() =>
+            logout.mutate(undefined, { onSettled: () => navigate('/entrar', { replace: true }) })
+          }
         >
           <LogOut aria-hidden />
           Sair

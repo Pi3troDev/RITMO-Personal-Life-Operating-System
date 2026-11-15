@@ -74,7 +74,10 @@ function KanbanView() {
 }
 
 export function TasksPage() {
-  const [layout, setLayout] = useState<'kanban' | 'list'>('kanban');
+  const [layout, setLayout] = useState<'kanban' | 'list'>(() =>
+    // No celular a lista cabe melhor que o quadro; o Kanban continua a um toque.
+    window.matchMedia('(max-width: 640px)').matches ? 'list' : 'kanban',
+  );
   const [view, setView] = useState<TaskView>('all');
   const [creating, setCreating] = useState(false);
 

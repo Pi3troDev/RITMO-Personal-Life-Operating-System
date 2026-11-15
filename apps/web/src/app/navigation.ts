@@ -12,10 +12,10 @@ import {
   ListTodo,
   NotebookPen,
   Repeat,
-  Settings,
   Sun,
   Wallet,
   BookHeart,
+  UserRound,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -97,7 +97,7 @@ export const NAV_GROUPS: NavGroup[] = [
 
 export const SYSTEM_ITEMS: NavItem[] = [
   { path: '/notificacoes', label: 'Notificações', icon: Bell, phase: 6, ready: false, description: 'Lembretes, prazos e alertas que você escolhe receber.' },
-  { path: '/configuracoes', label: 'Configurações', icon: Settings, phase: 1, ready: false, description: 'Perfil, tema, fuso horário, módulos ativos e áreas.' },
+  { path: '/configuracoes', label: 'Perfil', icon: UserRound, phase: 1, ready: true, description: 'Seus dados, sua semana, tema e senha.' },
 ];
 
 export const ALL_NAV_ITEMS: NavItem[] = [...NAV_GROUPS.flatMap((g) => g.items), ...SYSTEM_ITEMS];

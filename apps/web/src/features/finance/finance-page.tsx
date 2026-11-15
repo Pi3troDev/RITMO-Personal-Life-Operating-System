@@ -31,7 +31,7 @@ function Figure({
       <p className="text-xs text-muted-foreground">{label}</p>
       <p
         className={cn(
-          'mt-1 truncate text-2xl font-semibold tabular',
+          'mt-1 truncate text-lg font-semibold tabular sm:text-2xl',
           tone === 'positive' && 'text-success',
           tone === 'negative' && 'text-foreground',
         )}
@@ -323,7 +323,7 @@ export function FinancePage() {
           </section>
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
-            <div className="space-y-6">
+            <div className="min-w-0 space-y-6">
               <MonthlyChart overview={overview.data} />
               <section aria-labelledby="tx-title" className="surface p-5">
                 <h2 id="tx-title" className="text-sm font-semibold">
@@ -364,7 +364,7 @@ export function FinancePage() {
                 ) : null}
               </section>
             </div>
-            <aside className="space-y-6">
+            <aside className="min-w-0 space-y-6">
               {accounts.data ? (
                 <Accounts accounts={accounts.data} onAdd={() => setCreatingAccount(true)} />
               ) : null}

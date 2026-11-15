@@ -12,6 +12,7 @@ const pages = {
   '/tarefas': () => import('@/features/tasks/tasks-page').then((m) => ({ Component: m.TasksPage })),
   '/habitos': () => import('@/features/habits/habits-page').then((m) => ({ Component: m.HabitsPage })),
   '/objetivos': () => import('@/features/goals/goals-page').then((m) => ({ Component: m.GoalsPage })),
+  '/configuracoes': () => import('@/features/profile/profile-page').then((m) => ({ Component: m.ProfilePage })),
   '/financas': () => import('@/features/finance/finance-page').then((m) => ({ Component: m.FinancePage })),
 } as const;
 
