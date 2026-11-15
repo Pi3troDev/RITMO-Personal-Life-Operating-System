@@ -1,7 +1,13 @@
 import { Menu, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from 'react-router';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { ALL_NAV_ITEMS, MOBILE_TAB_PATHS } from '../navigation';
 import { useLiquid } from '@/lib/use-liquid';
@@ -34,8 +40,14 @@ export function MobileNav({ onCapture }: { onCapture: () => void }) {
 
   return (
     <>
-      <nav aria-label="Navegação móvel" className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
-        <div ref={liquid} className="glass-strong pointer-events-auto relative mx-auto flex h-16 max-w-md items-stretch rounded-[22px] px-1.5">
+      <nav
+        aria-label="Navegação móvel"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden"
+      >
+        <div
+          ref={liquid}
+          className="glass-strong pointer-events-auto relative mx-auto flex h-16 max-w-md items-stretch rounded-[22px] px-1.5"
+        >
           <Tab path={first} />
           <Tab path={second} />
           <div className="flex flex-1 items-center justify-center">
@@ -44,7 +56,10 @@ export function MobileNav({ onCapture }: { onCapture: () => void }) {
               onClick={onCapture}
               aria-label="Adicionar rápido"
               className="-mt-8 flex size-14 items-center justify-center rounded-full border border-white/45 text-primary-foreground shadow-[0_12px_30px_-6px_var(--primary),inset_0_1px_0_rgb(255_255_255/0.6)] transition-transform active:scale-95"
-              style={{ background: 'linear-gradient(135deg, color-mix(in oklab, var(--primary) 88%, white), var(--primary) 45%, color-mix(in oklab, var(--primary) 50%, var(--violet)))' }}
+              style={{
+                background:
+                  'linear-gradient(135deg, color-mix(in oklab, var(--primary) 88%, white), var(--primary) 45%, color-mix(in oklab, var(--primary) 50%, var(--violet)))',
+              }}
             >
               <Plus className="size-6" aria-hidden />
             </button>

@@ -25,11 +25,16 @@ export function useLiquid<T extends HTMLElement>(axis: Axis) {
       node.dataset.liquid = axis;
 
       let last = '';
+      // Item clicado: a lente vai para ele na hora, sem esperar a rota carregar.
+      let pending: HTMLElement | null = null;
+      let pendingTimer: number | undefined;
       let movingTimer: number | undefined;
       let frame: number | undefined;
 
       function measure() {
-        const active = node!.querySelector<HTMLElement>(ACTIVE_SELECTOR);
+        const current = node!.querySelector<HTMLElement>(ACTIVE_SELECTOR);
+        if (pending && (current === pending || !pending.isConnected)) pending = null;
+        const active = pending ?? current;
         if (!active) {
           node!.style.setProperty('--ind-o', '0');
           return;
@@ -69,7 +74,21 @@ export function useLiquid<T extends HTMLElement>(axis: Axis) {
         });
       }
 
+      function onClick(event: MouseEvent) {
+        const item = (event.target as HTMLElement).closest<HTMLElement>('a[href], [role="tab"]');
+        if (!item || !node!.contains(item) || item.getAttribute('target') === '_blank') return;
+        pending = item;
+        window.clearTimeout(pendingTimer);
+        pendingTimer = window.setTimeout(() => {
+          pending = null;
+          schedule();
+        }, 4000);
+        measure();
+      }
+      node.addEventListener('click', onClick);
+
       measure();
+      node.querySelector<HTMLElement>(ACTIVE_SELECTOR)?.scrollIntoView({ block: 'nearest' });
       // The first placement must not animate from the top-left corner.
       const ready = requestAnimationFrame(() => {
         node.dataset.ready = 'true';
@@ -86,6 +105,8 @@ export function useLiquid<T extends HTMLElement>(axis: Axis) {
       void document.fonts?.ready.then(schedule);
 
       return () => {
+        node.removeEventListener('click', onClick);
+        window.clearTimeout(pendingTimer);
         mutations.disconnect();
         resizes.disconnect();
         cancelAnimationFrame(ready);

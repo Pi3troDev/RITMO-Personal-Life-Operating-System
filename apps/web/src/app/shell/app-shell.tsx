@@ -8,7 +8,7 @@ import { DEMO_MODE } from '@/lib/env';
 import { cn } from '@/lib/utils';
 import { CommandPalette } from './command-palette';
 import { MobileNav } from './mobile-nav';
-import { Sidebar } from './sidebar';
+import { Logo, Sidebar } from './sidebar';
 import { ThemeToggle } from './theme-toggle';
 import { UserMenu } from './user-menu';
 
@@ -63,13 +63,6 @@ export function AppShell() {
 
   return (
     <div className="relative isolate min-h-dvh lg:flex lg:h-dvh lg:gap-2.5 lg:overflow-hidden lg:p-2.5">
-      {/* Refração do vidro líquido: usada pelo indicador deslizante (Chromium; os demais ignoram). */}
-      <svg width="0" height="0" className="pointer-events-none absolute" aria-hidden focusable="false">
-        <filter id="liquid-lens" x="-10%" y="-10%" width="120%" height="120%" colorInterpolationFilters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.014 0.03" numOctaves={2} seed={4} result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale={6} xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
       <div className="aurora" aria-hidden>
         <i />
         <i />
@@ -95,13 +88,15 @@ export function AppShell() {
       <div className="glass-panel relative flex min-w-0 flex-1 flex-col lg:overflow-hidden lg:rounded-2xl lg:border lg:border-[var(--glass-border)] lg:shadow-[inset_0_1px_0_var(--glass-highlight),0_30px_80px_-30px_var(--glass-shadow)]">
         {DEMO_MODE ? (
           <div className="bg-warning-soft/80 px-4 py-1 text-center text-[11px] text-foreground backdrop-blur">
-            <strong className="font-medium">Modo demonstração</strong> · dados de exemplo, nada é salvo no
-            servidor
+            <strong className="font-medium">Modo demonstração</strong> · dados de exemplo, nada é
+            salvo no servidor
           </div>
         ) : null}
 
-        <header className="glass-bar sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-[var(--glass-border)] px-4 lg:px-7">
-          <span className="text-base font-semibold tracking-tight lg:hidden">RITMO</span>
+        <header className="glass-bar sticky top-0 z-30 flex h-[calc(3.5rem+env(safe-area-inset-top))] shrink-0 items-center gap-2 border-b border-[var(--glass-border)] px-4 pt-[env(safe-area-inset-top)] lg:px-7">
+          <div className="lg:hidden">
+            <Logo />
+          </div>
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
@@ -109,7 +104,9 @@ export function AppShell() {
           >
             <Search className="size-3.5" aria-hidden />
             <span className="flex-1 text-left">Buscar ou ir para…</span>
-            <kbd className="rounded-md border border-border/70 px-1.5 py-px font-sans text-[10px]">Ctrl K</kbd>
+            <kbd className="rounded-md border border-border/70 px-1.5 py-px font-sans text-[10px]">
+              Ctrl K
+            </kbd>
           </button>
           <div className="ml-auto flex items-center gap-1.5">
             <Button
@@ -121,10 +118,15 @@ export function AppShell() {
             >
               <Search />
             </Button>
-            <Button onClick={() => setCaptureOpen(true)} className="hidden h-9 gap-1.5 rounded-full pl-3.5 pr-3 lg:inline-flex">
+            <Button
+              onClick={() => setCaptureOpen(true)}
+              className="hidden h-9 gap-1.5 rounded-full pl-3.5 pr-3 lg:inline-flex"
+            >
               <Plus aria-hidden />
               Adicionar
-              <kbd className="ml-1 rounded-md border border-primary-foreground/25 px-1.5 py-px font-sans text-[10px]">A</kbd>
+              <kbd className="ml-1 rounded-md border border-primary-foreground/25 px-1.5 py-px font-sans text-[10px]">
+                A
+              </kbd>
             </Button>
             <ThemeToggle />
             <UserMenu />

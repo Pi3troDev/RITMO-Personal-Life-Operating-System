@@ -52,7 +52,11 @@ export function CommandPalette({ open, onOpenChange, onCapture }: CommandPalette
             {group.items.map((item) => {
               const Icon = item.icon;
               return (
-                <CommandItem key={item.path} value={`${item.label} ${group.label}`} onSelect={() => go(item.path)}>
+                <CommandItem
+                  key={item.path}
+                  value={`${item.label} ${group.label}`}
+                  onSelect={() => go(item.path)}
+                >
                   <Icon aria-hidden />
                   {item.label}
                 </CommandItem>

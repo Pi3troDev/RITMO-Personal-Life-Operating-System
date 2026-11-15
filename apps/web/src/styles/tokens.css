@@ -237,78 +237,80 @@
 /* Tema escuro (principal) */
 .dark {
   color-scheme: dark;
-  --canvas: #0b0b0c;
+  /* Brilho branco sobre o vidro: quase nenhum no escuro, para não clarear as superfícies. */
+  --sheen: 0.12;
+  --canvas: #000000;
   --violet: #a78bfa;
-  --coral: #ff8a7a;
-  --sky: #6cb6ff;
-  --amber: #ffc266;
-  --cyan: #5eead4;
-  --aurora-1: #8d8d93;
-  --aurora-2: #5d5d63;
-  --aurora-3: #3d3d42;
-  --aurora-4: #6d6d73;
-  --aurora-opacity: 0.2;
-  --glass-bg: rgb(40 39 38 / 0.5);
-  --glass-bg-strong: rgb(30 29 28 / 0.8);
-  --glass-border: rgb(255 255 255 / 0.12);
+  --coral: #fb7185;
+  --sky: #60a5fa;
+  --amber: #fbbf24;
+  --cyan: #22d3ee;
+  --aurora-1: #9a9aa6;
+  --aurora-2: #6a6a74;
+  --aurora-3: #4a4a52;
+  --aurora-4: #8a8a96;
+  --aurora-opacity: 0.04;
+  --glass-bg: rgb(10 10 11 / 0.7);
+  --glass-bg-strong: rgb(7 7 8 / 0.94);
+  --glass-border: rgb(255 255 255 / 0.07);
   --glass-edge-a: rgb(255 255 255 / 0.55);
   --glass-edge-b: rgb(255 255 255 / 0.16);
   --glass-highlight: rgb(255 255 255 / 0.2);
-  --glass-shadow: rgb(0 0 0 / 0.45);
+  --glass-shadow: rgb(0 0 0 / 0.8);
   /* Superfícies */
-  --background: #171614;
-  --card: #1f1d1b;
-  --popover: #262422;
-  --muted: #262422;
-  --secondary: #2c2b28;
-  --accent: #2c2b28;
+  --background: #050505;
+  --card: #080809;
+  --popover: #0c0c0d;
+  --muted: #101012;
+  --secondary: #141416;
+  --accent: #141416;
   /* Texto */
-  --foreground: #edebe7;
-  --card-foreground: #edebe7;
-  --popover-foreground: #edebe7;
-  --secondary-foreground: #edebe7;
-  --accent-foreground: #edebe7;
-  --muted-foreground: #b8b5b0;
-  --subtle-foreground: #9f9c97;
+  --foreground: #f5f5f7;
+  --card-foreground: #f3f3f5;
+  --popover-foreground: #f3f3f5;
+  --secondary-foreground: #f3f3f5;
+  --accent-foreground: #f3f3f5;
+  --muted-foreground: #adadb5;
+  --subtle-foreground: #85858e;
   /* Contornos */
-  --border: #33312e;
-  --input: #7b7874;
-  --ring: #69d4be;
+  --border: #1a1a1d;
+  --input: #6a6a73;
+  --ring: #4be3c2;
   /* Acento (jade) */
-  --primary: #69d4be;
-  --primary-foreground: #011b16;
+  --primary: #4be3c2;
+  --primary-foreground: #031a15;
   /* Semânticas */
-  --destructive: #f87e77;
+  --destructive: #fb7185;
   --destructive-foreground: #200e0d;
-  --success: #76cf8a;
-  --warning: #edbb64;
-  --info: #86beee;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --info: #7cc0ff;
   /* Sidebar */
-  --sidebar: #12110f;
-  --sidebar-foreground: #edebe7;
-  --sidebar-primary: #69d4be;
+  --sidebar: #000000;
+  --sidebar-foreground: #f3f3f5;
+  --sidebar-primary: #4be3c2;
   --sidebar-primary-foreground: #011b16;
-  --sidebar-accent: #22201e;
-  --sidebar-accent-foreground: #edebe7;
-  --sidebar-border: #242320;
-  --sidebar-ring: #69d4be;
+  --sidebar-accent: #101012;
+  --sidebar-accent-foreground: #f3f3f5;
+  --sidebar-border: #17171a;
+  --sidebar-ring: #4be3c2;
   /* Áreas da vida */
-  --area-trabalho: #5381c4;
-  --area-estudos: #a87e24;
-  --area-programacao: #9787d6;
-  --area-ingles: #af557b;
-  --area-academia: #cf7e4b;
-  --area-espiritualidade: #008eb3;
-  --area-leitura: #668736;
-  --area-pessoal: #bb7bb9;
-  --area-outros: #767471;
+  --area-trabalho: #60a5fa;
+  --area-estudos: #fbbf24;
+  --area-programacao: #a78bfa;
+  --area-ingles: #f472b6;
+  --area-academia: #fb923c;
+  --area-espiritualidade: #22d3ee;
+  --area-leitura: #a3e635;
+  --area-pessoal: #e879f9;
+  --area-outros: #94a3b8;
   /* Gráficos */
-  --chart-1: #31ab95;
-  --chart-2: #cf7e4b;
-  --chart-3: #5381c4;
-  --chart-4: #a87e24;
-  --chart-5: #bb7bb9;
-  --chart-neutral: #767471;
+  --chart-1: #2dd4bf;
+  --chart-2: #fb923c;
+  --chart-3: #60a5fa;
+  --chart-4: #fbbf24;
+  --chart-5: #e879f9;
+  --chart-neutral: #94a3b8;
   /* Tons suaves (fundo de seleção, avisos, bloco ativo) */
   --primary-soft: color-mix(in oklab, var(--primary) 14%, var(--card));
   --success-soft: color-mix(in oklab, var(--success) 14%, var(--card));
