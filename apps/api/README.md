@@ -8,7 +8,8 @@ OpenAPI/Swagger gerada dos mesmos contratos.
 ```bash
 npm run setup      # instala, sobe o MariaDB local do projeto (porta 3310), gera o Prisma Client e aplica as migrações
 npm run dev:api    # API em http://localhost:3333
-npm run dev:web    # front em http://localhost:5173 (em outro terminal)
+npm run dev:web    # front em http://localhost:5173 (em outro terminal), falando com a API real
+npm run dev:demo -w @ritmo/web   # opcional: front com dados de exemplo, sem API
 ```
 
 - **Swagger UI:** <http://localhost:3333/api/docs> · **OpenAPI JSON:** <http://localhost:3333/api/openapi.json>

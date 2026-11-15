@@ -66,8 +66,12 @@ cadastro → tarefa → dia → refresh exercitado no servidor em execução. De
 - [x] Notificações: central, preferências, lembretes automáticos (compromisso, prazo, hábito, revisão, objetivo), base de web push
 - [x] Exportação dos dados do usuário em JSON
 - [x] Testes de isolamento: uma verificação por rota de que o usuário B não lê, altera nem apaga dados do usuário A
-- [ ] **Ligar o front à API** (trocar o MSW pelo cliente real, módulo por módulo) e criar as telas dos módulos ainda "em breve"
-- [ ] Telas de Revisões, Insights, Notificações e Configurações
+- [x] **Front ligado à API real**: o modo demonstração (MSW) virou opcional (`npm run dev:demo -w @ritmo/web`); o padrão fala com a API pelo proxy do Vite, e o cookie do refresh token funciona na mesma origem. Fluxo exercitado pelo proxy contra a API real validando cada resposta com os esquemas Zod do front (cadastro, refresh, Kanban, Meu Dia, hábitos, objetivo ligado à reserva, orçamento, marcos, captura, logout)
+- [x] Telas de criação que faltavam para um usuário novo (sem dados de exemplo): novo hábito, novo objetivo (manual, marcos ou meta numérica ligada a reserva) com adição de marcos, nova conta/reserva e limite de orçamento
+- [ ] Verificação visual no navegador das telas ligadas à API (não foi possível nesta sessão)
+- [ ] Telas dos módulos ainda "em breve": Estudos, Dev Space, Inglês, Leitura, Saúde, Espiritualidade (a API já está pronta)
+- [ ] Telas de Revisões, Insights, Notificações e Configurações (a API já está pronta)
+- [ ] Editar e excluir (hoje há criar e alternar): hábitos, objetivos, contas e movimentações
 - [ ] Recuperação de senha e verificação de e-mail (D18, exigem envio de e-mail)
 - [ ] Dockerfiles + `docker-compose.yml` (não verificável nesta máquina)
 - [ ] Testes ponta a ponta (Playwright) front + API

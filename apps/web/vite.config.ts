@@ -13,8 +13,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // The API (apps/api) will listen here once it exists. In demo mode the
-      // mock service worker answers /api before the request leaves the browser.
+      // A API (apps/api) escuta aqui. Mesma origem para o navegador, então o cookie do refresh token
+      // funciona sem CORS. Em modo demonstração o MSW responde /api antes de a requisição sair.
       '/api': { target: 'http://localhost:3333', changeOrigin: true },
     },
   },

@@ -1,18 +1,21 @@
 import { GOAL_CATEGORY_LABELS, type Goal, type GoalStatus } from '@ritmo/shared';
-import { Compass } from 'lucide-react';
+import { Compass, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/shared/page-header';
 import { ProgressBar } from '@/components/shared/progress';
 import { EmptyState, ErrorState, RowsSkeleton } from '@/components/shared/states';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { fromDateKey, formatShortDate } from '@/lib/dates';
 import { errorMessage } from '@/lib/http';
 import { formatCurrency } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { differenceInCalendarDays } from 'date-fns';
-import { useGoals, useToggleMilestone } from './api';
+import { useAddMilestone, useGoals, useToggleMilestone } from './api';
+import { NewGoalDialog } from './new-goal-dialog';
 
 const FILTERS: { value: GoalStatus | 'all'; label: string }[] = [
   { value: 'active', label: 'Ativos' },
@@ -30,9 +33,42 @@ function metricText(goal: Goal): string | null {
   return `${m.current} de ${m.target} ${m.unit}`;
 }
 
+function AddMilestone({ goalId }: { goalId: string }) {
+  const [title, setTitle] = useState('');
+  const add = useAddMilestone();
+
+  function submit(event: React.FormEvent) {
+    event.preventDefault();
+    const clean = title.trim();
+    if (!clean) return;
+    add.mutate(
+      { goalId, title: clean },
+      { onSuccess: () => setTitle(''), onError: (e) => toast.error(errorMessage(e)) },
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="mt-3 flex gap-2 border-t pt-3">
+      <Input
+        value={title}
+        maxLength={200}
+        placeholder="Adicionar um marco"
+        aria-label="Novo marco"
+        className="h-8 text-sm"
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <Button type="submit" size="sm" variant="outline" disabled={add.isPending || !title.trim()}>
+        <Plus aria-hidden /> Adicionar
+      </Button>
+    </form>
+  );
+}
+
 function GoalCard({ goal }: { goal: Goal }) {
   const toggle = useToggleMilestone();
-  const daysLeft = goal.targetDate ? differenceInCalendarDays(fromDateKey(goal.targetDate), new Date()) : null;
+  const daysLeft = goal.targetDate
+    ? differenceInCalendarDays(fromDateKey(goal.targetDate), new Date())
+    : null;
   const idleDays = goal.lastActivityAt
     ? differenceInCalendarDays(new Date(), new Date(goal.lastActivityAt))
     : null;
@@ -82,15 +118,21 @@ function GoalCard({ goal }: { goal: Goal }) {
                     )
                   }
                 />
-                <span className={cn('flex-1', m.done && 'text-muted-foreground line-through')}>{m.title}</span>
+                <span className={cn('flex-1', m.done && 'text-muted-foreground line-through')}>
+                  {m.title}
+                </span>
                 {m.dueDate && !m.done ? (
-                  <span className="text-xs text-muted-foreground tabular">{formatShortDate(fromDateKey(m.dueDate))}</span>
+                  <span className="text-xs text-muted-foreground tabular">
+                    {formatShortDate(fromDateKey(m.dueDate))}
+                  </span>
                 ) : null}
               </label>
             </li>
           ))}
         </ul>
       ) : null}
+
+      {goal.progressMode !== 'metric' ? <AddMilestone goalId={goal.id} /> : null}
 
       {stale ? (
         <p className="mt-4 rounded-lg bg-warning-soft px-3 py-2 text-xs">
@@ -103,6 +145,7 @@ function GoalCard({ goal }: { goal: Goal }) {
 
 export function GoalsPage() {
   const [filter, setFilter] = useState<GoalStatus | 'all'>('active');
+  const [creating, setCreating] = useState(false);
   const { data, isPending, isError, error, refetch } = useGoals();
   const visible = data?.filter((g) => filter === 'all' || g.status === filter) ?? [];
 
@@ -111,8 +154,17 @@ export function GoalsPage() {
       <PageHeader
         title="Objetivos"
         description="Cada objetivo conecta marcos, hábitos, tarefas e, quando faz sentido, dinheiro."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus aria-hidden /> Novo objetivo
+          </Button>
+        }
       />
-      <Tabs value={filter} onValueChange={(v) => setFilter(v as GoalStatus | 'all')} className="mb-5">
+      <Tabs
+        value={filter}
+        onValueChange={(v) => setFilter(v as GoalStatus | 'all')}
+        className="mb-5"
+      >
         <TabsList>
           {FILTERS.map((f) => (
             <TabsTrigger key={f.value} value={f.value}>
@@ -125,7 +177,16 @@ export function GoalsPage() {
       {isError ? <ErrorState error={error} onRetry={() => void refetch()} /> : null}
       {data ? (
         visible.length === 0 ? (
-          <EmptyState icon={Compass} title="Nenhum objetivo nesta visão" description="Os objetivos que você criar aparecem aqui." />
+          <EmptyState
+            icon={Compass}
+            title="Nenhum objetivo nesta visão"
+            description="Os objetivos que você criar aparecem aqui."
+            action={
+              <Button variant="outline" onClick={() => setCreating(true)}>
+                <Plus aria-hidden /> Criar um objetivo
+              </Button>
+            }
+          />
         ) : (
           <div className="grid gap-4 xl:grid-cols-2">
             {visible.map((goal) => (
@@ -134,6 +195,7 @@ export function GoalsPage() {
           </div>
         )
       ) : null}
+      <NewGoalDialog open={creating} onOpenChange={setCreating} />
     </>
   );
 }

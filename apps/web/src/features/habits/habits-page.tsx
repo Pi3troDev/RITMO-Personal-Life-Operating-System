@@ -1,5 +1,6 @@
 import type { Habit, HabitCheckin } from '@ritmo/shared';
-import { Check, Pause, Repeat } from 'lucide-react';
+import { Check, Pause, Plus, Repeat } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { AreaLabel } from '@/components/shared/area-dot';
 import { PageHeader } from '@/components/shared/page-header';
@@ -12,6 +13,7 @@ import { formatPercent } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { useHabitCheckins, useHabits, useSetCheckin } from './api';
 import { ConsistencyCalendar } from './consistency-calendar';
+import { NewHabitDialog } from './new-habit-dialog';
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -46,7 +48,9 @@ function HabitCard({ habit, checkins }: { habit: Habit; checkins: HabitCheckin[]
           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
             <AreaLabel area={area} />
             <span className="text-xs text-muted-foreground">
-              {habit.weekdays.length === 7 ? 'Todos os dias' : habit.weekdays.map((d) => WEEKDAY_SHORT[d]).join(', ')}
+              {habit.weekdays.length === 7
+                ? 'Todos os dias'
+                : habit.weekdays.map((d) => WEEKDAY_SHORT[d]).join(', ')}
             </span>
             {habit.targetValue ? (
               <span className="text-xs text-muted-foreground tabular">
@@ -100,22 +104,37 @@ function HabitCard({ habit, checkins }: { habit: Habit; checkins: HabitCheckin[]
 export function HabitsPage() {
   const habits = useHabits();
   const checkins = useHabitCheckins();
+  const [creating, setCreating] = useState(false);
 
   return (
     <>
       <PageHeader
         title="Hábitos"
         description="Consistência sustentável. Uma sequência interrompida não apaga o que você já construiu."
+        actions={
+          <Button onClick={() => setCreating(true)}>
+            <Plus aria-hidden /> Novo hábito
+          </Button>
+        }
       />
       {habits.isPending || checkins.isPending ? <RowsSkeleton rows={3} /> : null}
-      {habits.isError ? <ErrorState error={habits.error} onRetry={() => void habits.refetch()} /> : null}
-      {checkins.isError ? <ErrorState error={checkins.error} onRetry={() => void checkins.refetch()} /> : null}
+      {habits.isError ? (
+        <ErrorState error={habits.error} onRetry={() => void habits.refetch()} />
+      ) : null}
+      {checkins.isError ? (
+        <ErrorState error={checkins.error} onRetry={() => void checkins.refetch()} />
+      ) : null}
       {habits.data && checkins.data ? (
         habits.data.length === 0 ? (
           <EmptyState
             icon={Repeat}
             title="Nenhum hábito ainda"
             description="Comece com um hábito pequeno que você consiga manter mesmo nos dias ruins."
+            action={
+              <Button variant="outline" onClick={() => setCreating(true)}>
+                <Plus aria-hidden /> Criar o primeiro hábito
+              </Button>
+            }
           />
         ) : (
           <>
@@ -125,11 +144,13 @@ export function HabitsPage() {
               ))}
             </div>
             <p className="mt-6 text-xs text-muted-foreground">
-              Preenchido: feito · tracejado: dia excepcional (não quebra a sequência) · claro: previsto e sem registro.
+              Preenchido: feito · tracejado: dia excepcional (não quebra a sequência) · claro:
+              previsto e sem registro.
             </p>
           </>
         )
       ) : null}
+      <NewHabitDialog open={creating} onOpenChange={setCreating} />
     </>
   );
 }

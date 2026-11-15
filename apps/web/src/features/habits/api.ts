@@ -1,4 +1,4 @@
-import { habitCheckinSchema, habitSchema } from '@ritmo/shared';
+import { habitCheckinSchema, habitSchema, type CreateHabitInput } from '@ritmo/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { api } from '@/lib/http';
@@ -33,6 +33,18 @@ export function useSetCheckin() {
       status
         ? api.put(`/habits/${habitId}/checkins/${date}`, { status })
         : api.delete(`/habits/${habitId}/checkins/${date}`),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ['habits'] });
+      void queryClient.invalidateQueries({ queryKey: ['day'] });
+      void queryClient.invalidateQueries({ queryKey: ['goals'] });
+    },
+  });
+}
+
+export function useCreateHabit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateHabitInput) => api.post('/habits', input, { schema: habitSchema }),
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ['habits'] });
       void queryClient.invalidateQueries({ queryKey: ['day'] });

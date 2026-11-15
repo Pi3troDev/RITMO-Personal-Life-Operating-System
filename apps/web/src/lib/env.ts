@@ -1,6 +1,6 @@
 /**
- * Demo mode answers `/api` in the browser with sample data so the interface can be reviewed
- * before the backend exists. It is on in development unless `VITE_DEMO=false`, and never in a
- * production build.
+ * Modo demonstração: a API é simulada no navegador (MSW) com dados de exemplo, sem backend.
+ * Só liga explicitamente — `npm run dev:demo -w @ritmo/web` — e nunca entra em um build de produção.
+ * O padrão é falar com a API real (`apps/api`), via proxy do Vite em `/api`.
  */
-export const DEMO_MODE = import.meta.env.DEV && import.meta.env.VITE_DEMO !== 'false';
+export const DEMO_MODE = import.meta.env.DEV && import.meta.env.VITE_DEMO === 'true';
