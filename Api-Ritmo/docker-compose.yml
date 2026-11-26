@@ -1,0 +1,50 @@
+# Banco de dados do RITMO para desenvolvimento local.
+#
+#   Subir:      docker compose up -d
+#   Ver status: docker compose ps
+#   Ver logs:   docker compose logs -f db
+#   Desligar:   docker compose stop        (os dados continuam salvos)
+#   Apagar TUDO (inclusive os dados): docker compose down -v
+
+services:
+  # "db" é só o apelido deste serviço dentro do Compose.
+  db:
+    # Imagem oficial do PostgreSQL, baixada do Docker Hub (hub.docker.com/_/postgres).
+    # "17" é a versão (tag). Fixamos a versão para o banco não mudar sozinho de uma hora pra outra.
+    image: postgres:17
+
+    # Nome fixo do container (senão o Compose inventa um, tipo "api-ritmo-db-1").
+    container_name: ritmo-db
+
+    # Variáveis de ambiente que a imagem do Postgres lê NA PRIMEIRA VEZ que sobe,
+    # para criar o usuário e o banco. Só para uso local; em produção a senha vem de um segredo.
+    environment:
+      POSTGRES_DB: ritmo
+      POSTGRES_USER: ritmo
+      POSTGRES_PASSWORD: ritmo_dev
+
+    # "porta-do-seu-PC:porta-dentro-do-container".
+    # O Postgres escuta na 5432 dentro da caixa; isto liga a 5432 do seu Windows a ela.
+    # É por esse endereço (localhost:5432) que o Spring vai conectar.
+    ports:
+      - "5432:5432"
+
+    # Sem isso, os dados morrem junto com o container.
+    # "ritmo-pgdata" é um volume nomeado, gerenciado pelo Docker, montado onde o Postgres guarda os arquivos.
+    volumes:
+      - ritmo-pgdata:/var/lib/postgresql/data
+
+    # Reinicia sozinho se cair ou quando o Docker Desktop abrir, a menos que você tenha dado "stop".
+    restart: unless-stopped
+
+    # Como o Docker sabe que o banco está PRONTO (e não só "ligado"):
+    # roda pg_isready a cada 5s. Útil para "docker compose ps" mostrar "healthy".
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ritmo -d ritmo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+# Declaração dos volumes usados acima.
+volumes:
+  ritmo-pgdata:
