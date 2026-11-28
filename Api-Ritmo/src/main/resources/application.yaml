@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: RITMO-System
+
+  # Conexão com o PostgreSQL que sobe pelo docker-compose.yml.
+  # Os valores com ${VAR:padrão} usam a variável de ambiente VAR se existir;
+  # senão usam o padrão (o do desenvolvimento local). Em produção você define as variáveis.
+  datasource:
+    # jdbc:postgresql://<host>:<porta>/<nome-do-banco>
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ritmo}
+    username: ${DB_USER:ritmo}
+    password: ${DB_PASSWORD:ritmo_dev}
+
+  jpa:
+    hibernate:
+      # validate = o Hibernate NÃO mexe no banco, só confere se as entidades batem com as tabelas.
+      # Quem cria/altera tabelas é o Flyway (db/migration).
+      ddl-auto: validate
+    # Evita o Spring abrir transação/conexão durante a renderização da resposta HTTP.
+    open-in-view: false
+
+  flyway:
+    # Pasta (dentro de src/main/resources) com os scripts V1__..., V2__...
+    locations: classpath:db/migration
+
+server:
+  port: 8080
